@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:dot_mobile/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,7 +12,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       themeMode: ThemeMode.dark,
       theme: ThemeData(
@@ -69,10 +72,21 @@ class StarterPage extends StatelessWidget {
     ButtonStyle? style,
     required VoidCallback onPressed,
   }) {
+    final bottomSafeArea = MediaQuery.of(Get.context!).padding.bottom;
+    final paddingBottom = max<double>(
+      0,
+      16 - bottomSafeArea,
+    );
+
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
-        height: 72,
+        padding: EdgeInsets.fromLTRB(
+          12,
+          16,
+          12,
+          paddingBottom,
+        ),
+        height: 64,
         child: OutlinedButton(
           onPressed: onPressed,
           child: child,
