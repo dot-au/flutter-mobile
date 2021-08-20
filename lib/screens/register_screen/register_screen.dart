@@ -1,9 +1,9 @@
-import 'package:dot_mobile/screens/register_screen/register_screen.dart';
+import 'package:dot_mobile/screens/login_screen/login_screen.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,13 +20,13 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Log In",
+                  "Register",
                   style: Get.textTheme.headline4!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                SignInForm(),
+                RegisterForm(),
               ],
             ),
           ),
@@ -38,18 +38,19 @@ class LoginScreen extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () async {
-                await Get.to(() => RegisterScreen());
+                await Get.to(() => LoginScreen());
               },
               style: ButtonThemes.textButtonThemeWithScaffoldBackground(),
               child: Text.rich(
                 TextSpan(
-                  text: "Don't have an account? ",
+                  text: "Already have an account? ",
                   children: [
                     TextSpan(
-                        text: "Register",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                        )),
+                      text: "Sign in",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
                     // can add more TextSpans here...
                   ],
                 ),
@@ -63,18 +64,18 @@ class LoginScreen extends StatelessWidget {
 }
 
 // Define a custom Form widget.
-class SignInForm extends StatefulWidget {
-  const SignInForm({Key? key}) : super(key: key);
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
 
   @override
-  SignInFormState createState() {
-    return SignInFormState();
+  RegisterFormState createState() {
+    return RegisterFormState();
   }
 }
 
 // Define a corresponding State class.
 // This class holds data related to the form.
-class SignInFormState extends State<SignInForm> {
+class RegisterFormState extends State<RegisterForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //

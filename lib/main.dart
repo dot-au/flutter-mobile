@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dot_mobile/screens/login_screen/login_screen.dart';
+import 'package:dot_mobile/screens/register_screen/register_screen.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,7 +64,9 @@ class StarterPage extends StatelessWidget {
                 child: Text("Log In"),
               ),
               _buildButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await Get.to(() => RegisterScreen());
+                },
                 child: Text("Register"),
                 style: ButtonThemes.outlinedButtonThemeDark(),
               )
