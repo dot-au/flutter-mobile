@@ -144,16 +144,29 @@ class SignInFormState extends State<SignInForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'EMAIL',
-        labelStyle: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+        filled: true,
+        fillColor: Colors.white,
+        hintText: "Password",
+        hintStyle: TextStyle(
+          color: ColorThemes.primaryColor,
+
+          // fontWeight: FontWeight.bold,
         ),
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(bottom: 1),
+          child: Icon(
+            Icons.email_outlined,
+            color: ColorThemes.primaryColor,
+          ),
+        ),
+        prefixStyle: TextStyle(color: Colors.red),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
         ),
         focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        errorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
         ),
       ),
