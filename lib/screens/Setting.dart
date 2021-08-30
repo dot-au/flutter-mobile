@@ -1,9 +1,8 @@
-import 'package:dot_mobile/screens/login_screen/login_screen.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RegisterScreen extends StatelessWidget {
+class Setting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,43 +19,18 @@ class RegisterScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Register",
+                  "Forget Password",
                   style: Get.textTheme.headline4!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                RegisterForm(),
+                Text("Enter the email address associated with your account",
+                    style: Get.textTheme.bodyText1),
+                ForgetForm(),
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () async {
-                await Get.to(() => LoginScreen());
-              },
-              style: ButtonThemes.textButtonThemeWithScaffoldBackground(),
-              child: Text.rich(
-                TextSpan(
-                  text: "Already have an account? ",
-                  children: [
-                    TextSpan(
-                      text: "Sign in",
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    // can add more TextSpans here...
-                  ],
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -64,18 +38,18 @@ class RegisterScreen extends StatelessWidget {
 }
 
 // Define a custom Form widget.
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key? key}) : super(key: key);
+class ForgetForm extends StatefulWidget {
+  const ForgetForm({Key? key}) : super(key: key);
 
   @override
-  RegisterFormState createState() {
-    return RegisterFormState();
+  ForgetFormState createState() {
+    return ForgetFormState();
   }
 }
 
 // Define a corresponding State class.
 // This class holds data related to the form.
-class RegisterFormState extends State<RegisterForm> {
+class ForgetFormState extends State<ForgetForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
@@ -92,22 +66,8 @@ class RegisterFormState extends State<RegisterForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 32.0, top: 48.0),
+            padding: const EdgeInsets.only(bottom: 36.0, top: 48.0),
             child: _buildTextFormField(),
-          ),
-          _buildTextFormField(),
-          TextButton(
-            onPressed: () {},
-            child: Text("Forget your password?"),
-            style:
-                ButtonThemes.textButtonThemeWithScaffoldBackground().copyWith(
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-              textStyle: MaterialStateProperty.all(
-                TextStyle(
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 24.0),
@@ -126,7 +86,7 @@ class RegisterFormState extends State<RegisterForm> {
                 }
               },
               child: Text(
-                'LOG IN',
+                'RESET PASSWORD',
                 style: Get.textTheme.bodyText1!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -143,14 +103,14 @@ class RegisterFormState extends State<RegisterForm> {
       // The validator receives the text that the user has entered.
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter some text';
+          return 'Please enter information';
         }
         return null;
       },
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        hintText: "Password",
+        hintText: "Email Address",
         hintStyle: TextStyle(
           color: ColorThemes.primaryColor,
 
