@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:dot_mobile/screens/login_screen/login_screen.dart';
-import 'package:dot_mobile/screens/register_screen/register_screen.dart';
+import 'package:dot_mobile/screens/Login.dart';
+import 'package:dot_mobile/screens/Register.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'DOT',
       themeMode: ThemeMode.dark,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -59,7 +59,7 @@ class StarterPage extends StatelessWidget {
             children: [
               _buildButton(
                 onPressed: () async {
-                  await Get.to(() => LoginScreen());
+                  await Get.to(() => Login());
                 },
                 child: Text("Log In"),
               ),
@@ -69,7 +69,7 @@ class StarterPage extends StatelessWidget {
                 },
                 child: Text("Register"),
                 style: ButtonThemes.outlinedButtonThemeDark(),
-              )
+              ),
             ],
           ),
         ),

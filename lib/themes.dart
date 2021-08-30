@@ -31,8 +31,8 @@ class ButtonThemes {
 
   static ButtonStyle elevatedButtonThemeLight() {
     return ElevatedButton.styleFrom(
-      primary: Colors.white,//change background color of button
-      onPrimary: ColorThemes.primaryColor,//change text color of button
+      primary: Colors.white, //change background color of button
+      onPrimary: ColorThemes.primaryColor, //change text color of button
       shape: StadiumBorder(),
       side: BorderSide(width: 1, color: const Color(0xFF232F34)),
     );
