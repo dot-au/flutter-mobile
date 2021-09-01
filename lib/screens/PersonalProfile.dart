@@ -96,30 +96,4 @@ class PersonalProfile extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildButton({
-    required Widget child,
-    ButtonStyle? style,
-    required VoidCallback onPressed,
-  }) {
-    final bottomSafeArea = MediaQuery.of(Get.context!).padding.bottom;
-    // final paddingBottom = max<double>(
-    //   0,
-    //   16 - bottomSafeArea,
-    // );
-
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.fromLTRB(12, 16, 12, 0
-            //paddingBottom,
-            ),
-        height: 64,
-        child: OutlinedButton(
-          onPressed: onPressed,
-          child: child,
-          style: style,
-        ),
-      ),
-    );
-  }
 }
