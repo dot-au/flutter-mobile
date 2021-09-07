@@ -6,6 +6,7 @@ import 'package:dot_mobile/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -52,17 +53,119 @@ class DotApp extends StatelessWidget {
   }
 }
 
+class HideNavbar {
+  final ScrollController controller = ScrollController();
+  final ValueNotifier<bool> visible = ValueNotifier<bool>(true);
+
+  HideNavbar() {
+    visible.value = true;
+    controller.addListener(
+      () {
+        final scrollDirection = controller.position.userScrollDirection;
+        if (scrollDirection == ScrollDirection.reverse) {
+          if (visible.value) {
+            visible.value = false;
+          }
+        }
+
+        if (scrollDirection == ScrollDirection.forward ||
+            scrollDirection == ScrollDirection.idle) {
+          if (!visible.value) {
+            visible.value = true;
+          }
+        }
+      },
+    );
+  }
+
+  void dispose() {
+    controller.dispose();
+    visible.dispose();
+  }
+}
+
 class HomeScreen extends StatelessWidget {
+  final HideNavbar hiding = HideNavbar();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
+        controller: hiding.controller,
         children: [
-          Text("Something"),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 512.0),
+            child: Text("Something"),
+          ),
         ],
       ),
+      bottomNavigationBar: ValueListenableBuilder(
+        valueListenable: hiding.visible,
+        builder: (context, bool value, child) => AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          height: value ? 128 : 0.0,
+          child: bottomBar(),
+          curve: Curves.easeInOut,
+        ),
+      ),
+    );
+  }
+
+  Widget bottomBar() {
+    return Container(
+      height: 128,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildBottomNavigationBarButton(),
+          _buildBottomNavigationBarButton(),
+          _buildBottomNavigationBarButton(),
+          _buildBottomNavigationBarButton(),
+          _buildBottomNavigationBarButton()
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNavigationBarButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.white,
+        shape: CircleBorder(),
+        // padding: EdgeInsets.all(12.0),
+      ),
+      child: Icon(
+        Icons.sync,
+      ),
+      onPressed: () {},
     );
   }
 }
