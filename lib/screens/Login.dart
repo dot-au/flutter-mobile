@@ -1,4 +1,4 @@
-import 'package:dot_mobile/screens/Register.dart';
+import 'package:dot_mobile/screens/register_screen.dart';
 import 'package:dot_mobile/screens/ForgetPassword.dart';
 import 'package:dot_mobile/screens/PersonalProfile.dart';
 import 'package:dot_mobile/themes.dart';
