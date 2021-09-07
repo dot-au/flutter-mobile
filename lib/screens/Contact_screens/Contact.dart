@@ -1,4 +1,4 @@
-import 'package:dot_mobile/screens/Login.dart';
+import 'package:dot_mobile/screens/login_screen.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

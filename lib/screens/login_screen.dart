@@ -2,6 +2,8 @@ import 'package:dot_mobile/screens/register_screen.dart';
 import 'package:dot_mobile/screens/ForgetPassword.dart';
 import 'package:dot_mobile/screens/PersonalProfile.dart';
 import 'package:dot_mobile/themes.dart';
+import 'package:dot_mobile/widgets/custom_text_form_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -74,15 +76,11 @@ class SignInForm extends StatefulWidget {
   }
 }
 
-// Define a corresponding State class.
-// This class holds data related to the form.
 class SignInFormState extends State<SignInForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a `GlobalKey<FormState>`,
-  // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -93,23 +91,39 @@ class SignInFormState extends State<SignInForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 32.0, top: 48.0),
-            child: _buildTextFormField("Email Address"),
+            padding: const EdgeInsets.only(bottom: 15.0, top: 42.0),
+            child: CustomTextFormField(
+              hintText: "Email Address",
+              controller: emailController,
+              icon: Icons.email_outlined,
+              validator: (value) {
+                const errorMessage = "Email is invalid";
+                if (value == null) {
+                  return errorMessage;
+                }
+
+                final isValid = RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                    .hasMatch(value);
+
+                if (!isValid) {
+                  return errorMessage;
+                }
+              },
+            ),
           ),
-          _buildTextFormField("Password"),
-          TextButton(
-            onPressed: () async {
-              await Get.to(() => ForgetPassword());
-            },
-            child: Text("Forget your password?"),
-            style:
-                ButtonThemes.textButtonThemeWithScaffoldBackground().copyWith(
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-              textStyle: MaterialStateProperty.all(
-                TextStyle(
-                  decoration: TextDecoration.underline,
-                ),
-              ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6.0, top: 15.0),
+            child: CustomTextFormField(
+              controller: passwordController,
+              hintText: "Password",
+              icon: Icons.password_outlined,
+              obscureText: true,
+              validator: (value) {
+                if (value == null || value.length < 8) {
+                  return "Password must be at least 8 characters.";
+                }
+              },
             ),
           ),
           Container(
@@ -121,16 +135,25 @@ class SignInFormState extends State<SignInForm> {
               onPressed: () async {
                 // Validate returns true if the form is valid, or false otherwise.
                 if (_formKey.currentState!.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                  await Get.to(() => PersonalProfile());
+                  try {
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == 'user-not-found' ||
+                        e.code == 'wrong-password') {
+                      Get.snackbar(
+                        "Invalid email or password!",
+                        "Please try again!",
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    }
+                  }
                 }
               },
               child: Text(
-                'LOG IN',
+                'SIGN IN',
                 style: Get.textTheme.bodyText1!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -138,45 +161,6 @@ class SignInFormState extends State<SignInForm> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTextFormField(String filling) {
-    return TextFormField(
-      // The validator receives the text that the user has entered.
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Enter your Email and Password';
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        hintText: filling,
-        hintStyle: TextStyle(
-          color: ColorThemes.primaryColor,
-
-          // fontWeight: FontWeight.bold,
-        ),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(bottom: 1),
-          child: Icon(
-            Icons.email_outlined,
-            color: ColorThemes.primaryColor,
-          ),
-        ),
-        prefixStyle: TextStyle(color: Colors.red),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-        ),
       ),
     );
   }

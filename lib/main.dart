@@ -1,18 +1,35 @@
 import 'dart:math';
 
-import 'package:dot_mobile/screens/Login.dart';
+import 'package:dot_mobile/screens/login_screen.dart';
 import 'package:dot_mobile/screens/register_screen.dart';
 import 'package:dot_mobile/themes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  var initialScreen;
+  if (FirebaseAuth.instance.currentUser == null) {
+    initialScreen = StarterPage();
+  } else {
+    initialScreen = HomeScreen();
+  }
+
+  runApp(DotApp(
+    initialScreen: initialScreen,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class DotApp extends StatelessWidget {
+  final Widget initialScreen;
+
+  const DotApp({Key? key, required this.initialScreen}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -30,7 +47,22 @@ class MyApp extends StatelessWidget {
           style: ButtonThemes.outlinedButtonThemeLight(),
         ),
       ),
-      home: StarterPage(),
+      home: initialScreen,
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text("Something"),
+        ],
+      ),
     );
   }
 }
