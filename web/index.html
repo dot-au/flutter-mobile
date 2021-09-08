@@ -26,15 +26,9 @@
     <title>dot_mobile</title>
     <link rel="manifest" href="manifest.json">
 
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import {initializeApp} from "https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js";
-        import {getAnalytics} from "https://www.gstatic.com/firebasejs/9.0.1/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyDBJt3jGcNFomg7PYwGQL0rzZkA6hrCV6M",
             authDomain: "dot-mobile-ee8bf.firebaseapp.com",
@@ -45,9 +39,7 @@
             measurementId: "G-E11V2EZ07Y"
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+        firebase.initializeApp(firebaseConfig);
     </script>
 
     <style>
