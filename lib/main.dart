@@ -15,10 +15,11 @@ void main() async {
   await Firebase.initializeApp();
 
   var initialScreen;
-  if (FirebaseAuth.instance.currentUser == null) {
-    initialScreen = StarterPage();
-  } else {
+  if (FirebaseAuth.instance.currentUser != null ||
+      await FirebaseAuth.instance.authStateChanges().first != null) {
     initialScreen = HomeScreen();
+  } else {
+    initialScreen = StarterPage();
   }
 
   runApp(DotApp(
