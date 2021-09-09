@@ -131,7 +131,7 @@ class HomeScreen extends StatelessWidget {
       bottomNavigationBar: ValueListenableBuilder(
         valueListenable: hiding.visible,
         builder: (context, bool value, child) => AnimatedContainer(
-          duration: Duration(milliseconds: 500),
+          duration: Duration(milliseconds: 300),
           height: value ? 128 : 0.0,
           child: bottomBar(),
           curve: Curves.easeInOut,
@@ -146,25 +146,44 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildBottomNavigationBarButton(),
-          _buildBottomNavigationBarButton(),
-          _buildBottomNavigationBarButton(),
-          _buildBottomNavigationBarButton(),
-          _buildBottomNavigationBarButton()
+          _buildBottomNavigationBarButton(
+            active: true,
+            iconData: Icons.calendar_today_outlined,
+          ),
+          _buildBottomNavigationBarButton(
+            active: false,
+            iconData: Icons.messenger_outline,
+          ),
+          _buildBottomNavigationBarButton(
+            active: false,
+            iconData: Icons.home_outlined,
+          ),
+          _buildBottomNavigationBarButton(
+            active: false,
+            iconData: Icons.people_outline,
+          ),
+          _buildBottomNavigationBarButton(
+            active: false,
+            iconData: Icons.settings,
+          )
         ],
       ),
     );
   }
 
-  Widget _buildBottomNavigationBarButton() {
+  Widget _buildBottomNavigationBarButton({
+    required bool active,
+    required IconData iconData,
+  }) {
     return TextButton(
       style: TextButton.styleFrom(
-        backgroundColor: Colors.white,
+        backgroundColor: active ? const Color(0xFFF9AA33) : Colors.white,
         shape: CircleBorder(),
-        // padding: EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(12.0),
       ),
       child: Icon(
-        Icons.sync,
+        iconData,
+        color: const Color(0xFF5F5F5F),
       ),
       onPressed: () {},
     );
