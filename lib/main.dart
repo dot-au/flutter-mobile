@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:dot_mobile/screens/home_screen.dart';
 import 'package:dot_mobile/screens/login_screen.dart';
 import 'package:dot_mobile/screens/register_screen.dart';
 import 'package:dot_mobile/themes.dart';
+import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -82,111 +84,6 @@ class HideNavbar {
   void dispose() {
     controller.dispose();
     visible.dispose();
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  final HideNavbar hiding = HideNavbar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        controller: hiding.controller,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 512.0),
-            child: Text("Something"),
-          ),
-        ],
-      ),
-      bottomNavigationBar: ValueListenableBuilder(
-        valueListenable: hiding.visible,
-        builder: (context, bool value, child) => AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          height: value ? 128 : 0.0,
-          child: bottomBar(),
-          curve: Curves.easeInOut,
-        ),
-      ),
-    );
-  }
-
-  Widget bottomBar() {
-    return Container(
-      height: 128,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildBottomNavigationBarButton(
-            active: true,
-            iconData: Icons.calendar_today_outlined,
-          ),
-          _buildBottomNavigationBarButton(
-            active: false,
-            iconData: Icons.messenger_outline,
-          ),
-          _buildBottomNavigationBarButton(
-            active: false,
-            iconData: Icons.home_outlined,
-          ),
-          _buildBottomNavigationBarButton(
-            active: false,
-            iconData: Icons.people_outline,
-          ),
-          _buildBottomNavigationBarButton(
-            active: false,
-            iconData: Icons.settings,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigationBarButton({
-    required bool active,
-    required IconData iconData,
-  }) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: active ? const Color(0xFFF9AA33) : Colors.white,
-        shape: CircleBorder(),
-        padding: EdgeInsets.all(12.0),
-      ),
-      child: Icon(
-        iconData,
-        color: const Color(0xFF5F5F5F),
-      ),
-      onPressed: () {},
-    );
   }
 }
 
