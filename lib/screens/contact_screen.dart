@@ -8,7 +8,14 @@ class ContactScreen extends StatelessWidget {
     return AuthenticatedScaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
-        label: Text("Add Contact"),
+        label: Text(
+          "Add Contact",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Color(0xFFF9AA33),
       ),
       body: SafeArea(
         child: Padding(
