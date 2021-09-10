@@ -1,4 +1,3 @@
-import 'package:dot_mobile/screens/Contact_screens/Contact.dart';
 import 'package:dot_mobile/screens/Message.dart';
 import 'package:dot_mobile/screens/Events.dart';
 import 'package:dot_mobile/screens/Setting.dart';
@@ -6,6 +5,8 @@ import 'package:dot_mobile/screens/Calendar.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'contact_screen.dart';
 
 class PersonalProfile extends StatelessWidget {
   @override
@@ -74,7 +75,7 @@ class PersonalProfile extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () async {
-                  await Get.to(() => Contact());
+                  await Get.to(() => ContactScreen());
                 },
                 icon: Image.asset(
                   'assets/contacts.png',
