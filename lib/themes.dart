@@ -15,9 +15,11 @@ class ButtonThemes {
     );
   }
 
-  static ButtonStyle outlinedButtonThemeLight() {
+  static ButtonStyle outlinedButtonThemeLight({
+    Color color = ColorThemes.primaryColor,
+  }) {
     return OutlinedButton.styleFrom(
-      primary: ColorThemes.primaryColor,
+      primary: color,
       shape: StadiumBorder(),
       side: BorderSide(width: 1, color: const Color(0xFF232F34)),
     );
@@ -29,9 +31,9 @@ class ButtonThemes {
     );
   }
 
-  static ButtonStyle elevatedButtonThemeLight() {
+  static ButtonStyle elevatedButtonThemeLight({color: Colors.white}) {
     return ElevatedButton.styleFrom(
-      primary: Colors.white, //change background color of button
+      primary: color, //change background color of button
       onPrimary: ColorThemes.primaryColor, //change text color of button
       shape: StadiumBorder(),
       side: BorderSide(width: 1, color: const Color(0xFF232F34)),

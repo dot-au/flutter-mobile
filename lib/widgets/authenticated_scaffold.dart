@@ -9,20 +9,23 @@ class AuthenticatedScaffold extends StatelessWidget {
   final int active;
   final Widget body;
   final FloatingActionButton? floatingActionButton;
+  final PreferredSizeWidget? appBar;
 
   AuthenticatedScaffold({
     Key? key,
     required this.active,
     required this.body,
+    this.appBar,
     this.floatingActionButton,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar,
       floatingActionButton: floatingActionButton,
       body: SingleChildScrollView(child: body),
-      bottomNavigationBar: ValueListenableBuilder(
+      bottomNavigationBar: appBar == null ? ValueListenableBuilder(
         valueListenable: hiding.visible,
         builder: (context, bool value, child) => AnimatedContainer(
           duration: Duration(milliseconds: 300),
@@ -30,7 +33,7 @@ class AuthenticatedScaffold extends StatelessWidget {
           child: bottomBar(),
           curve: Curves.easeInOut,
         ),
-      ),
+      ) : null,
     );
   }
 

@@ -50,6 +50,19 @@ class DotApp extends StatelessWidget {
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonThemes.outlinedButtonThemeLight(),
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.white,),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.5),
+            ),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
       home: initialScreen,
     );

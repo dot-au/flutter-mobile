@@ -1,17 +1,21 @@
 import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'add_contact_screen.dart';
 
 class ContactScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AuthenticatedScaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Get.to(() => AddContactScreen());
+        },
         label: Text(
           "Add Contact",
           style: TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
