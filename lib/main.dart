@@ -4,7 +4,6 @@ import 'package:dot_mobile/screens/home_screen.dart';
 import 'package:dot_mobile/screens/login_screen.dart';
 import 'package:dot_mobile/screens/register_screen.dart';
 import 'package:dot_mobile/themes.dart';
-import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +50,9 @@ class DotApp extends StatelessWidget {
           style: ButtonThemes.outlinedButtonThemeLight(),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: Colors.white,),
+          labelStyle: TextStyle(
+            color: Colors.white,
+          ),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: Colors.white.withOpacity(0.5),

@@ -1,9 +1,26 @@
+import 'package:dot_mobile/models/models.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_gravatar/simple_gravatar.dart';
+import 'package:uuid/uuid.dart';
 
-class AddContactScreen extends StatelessWidget {
+class AddContactScreen extends StatefulWidget {
+  @override
+  State<AddContactScreen> createState() => _AddContactScreenState();
+}
+
+class _AddContactScreenState extends State<AddContactScreen> {
+  final firstNameController = TextEditingController.fromValue(
+    TextEditingValue(text: "Something"),
+  );
+
+  final lastNameController = TextEditingController.fromValue(
+    TextEditingValue(text: "Something1"),
+  );
+
   @override
   Widget build(BuildContext context) {
     final inputStyle = TextStyle(color: Colors.white);
@@ -24,11 +41,15 @@ class AddContactScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding:
-                          EdgeInsets.only(right: 8.0, top: 16.0, bottom: 16.0),
-                      child: TextField(
+                      padding: EdgeInsets.only(
+                        right: 8.0,
+                        top: 16.0,
+                        bottom: 16.0,
+                      ),
+                      child: TextFormField(
                         style: inputStyle,
                         decoration: InputDecoration(labelText: "First name"),
+                        controller: firstNameController,
                       ),
                     ),
                   ),
@@ -39,9 +60,10 @@ class AddContactScreen extends StatelessWidget {
                         top: 16.0,
                         bottom: 16.0,
                       ),
-                      child: TextField(
+                      child: TextFormField(
                         style: inputStyle,
                         decoration: InputDecoration(labelText: "Last name"),
+                        controller: lastNameController,
                       ),
                     ),
                   ),
@@ -90,7 +112,20 @@ class AddContactScreen extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await DotModel().addContact(Contact(
+                        user: FirebaseAuth.instance.currentUser!.email!,
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
+                        avatar: Gravatar("${Uuid().v1()}@example.com").imageUrl(
+                          size: 200,
+                          defaultImage: GravatarImage.retro,
+                          rating: GravatarRating.pg,
+                          fileExtension: true,
+                        ),
+                      ));
+                      Get.back();
+                    },
                     style: ButtonThemes.elevatedButtonThemeLight(
                       color: const Color(0xFFF9AA33),
                     ),

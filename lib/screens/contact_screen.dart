@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dot_mobile/models/models.dart';
 import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,9 +25,91 @@ class ContactScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            SearchField(),
-          ]),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SearchField(),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 16.0,
+                ),
+                child: StreamBuilder(
+                  stream: DotModel().contactDbRef.snapshots(),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<QuerySnapshot<Contact>> snapshot,
+                  ) {
+                    if (snapshot.hasData) {
+                      final tiles = snapshot.data!.docs.map((e) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              e.data().avatar,
+                            ),
+                          ),
+                          title: Text(
+                            e.data().firstName + " " + e.data().lastName,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              backgroundColor:
+                                  Get.theme.scaffoldBackgroundColor,
+                              builder: (BuildContext context) {
+                                return Column(
+                                  children: [
+                                    Container(
+                                      width: 72,
+                                      height: 72,
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                          e.data().avatar,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 16.0,
+                                      ),
+                                      child: Text(
+                                        e.data().firstName +
+                                            " " +
+                                            e.data().lastName,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              context: context,
+                            );
+                          },
+                        );
+                      }).toList();
+
+                      return Column(
+                        children: ListTile.divideTiles(
+                          context: context,
+                          tiles: tiles,
+                        ).toList(),
+                      );
+                    }
+
+                    return Container();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       active: 3,
