@@ -48,7 +48,7 @@ class ContactScreen extends StatelessWidget {
                             ),
                           ),
                           title: Text(
-                            e.data().firstName + " " + e.data().lastName,
+                            e.data().fullName,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
@@ -62,32 +62,36 @@ class ContactScreen extends StatelessWidget {
                               backgroundColor:
                                   Get.theme.scaffoldBackgroundColor,
                               builder: (BuildContext context) {
-                                return Column(
-                                  children: [
-                                    Container(
-                                      width: 72,
-                                      height: 72,
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                          e.data().avatar,
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16.0,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 72,
+                                        height: 72,
+                                        child: CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                            e.data().avatar,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 16.0,
-                                      ),
-                                      child: Text(
-                                        e.data().firstName +
-                                            " " +
-                                            e.data().lastName,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 16.0,
+                                        ),
+                                        child: Text(
+                                          e.data().fullName,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 );
                               },
                               context: context,

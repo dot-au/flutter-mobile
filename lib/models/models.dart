@@ -46,6 +46,10 @@ class Contact {
     required this.avatar,
   });
 
+  String get fullName {
+    return firstName + " " + lastName;
+  }
+
   factory Contact.fromJson(Map<String, dynamic> json) =>
       _$ContactFromJson(json);
 
