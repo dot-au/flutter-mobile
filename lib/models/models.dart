@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
 
@@ -10,13 +10,25 @@ class DotModel {
     return FirebaseFirestore.instance
         .collection(contactDbName)
         .withConverter<Contact>(
-          fromFirestore: (snapshots, _) => Contact.fromJson(snapshots.data()!),
-          toFirestore: (contact, _) => contact.toJson(),
-        );
+      fromFirestore: (snapshots, _) {
+        final data = snapshots.data()!;
+        data.putIfAbsent('uid', () => snapshots.id);
+        return Contact.fromJson(data);
+      },
+      toFirestore: (contact, _) {
+        final data = contact.toJson();
+        data.remove('uid');
+        return data;
+      },
+    );
   }
 
   Future<DocumentReference<Contact>> addContact(Contact contact) {
     return contactDbRef.add(contact);
+  }
+
+  Future updateContact(Contact contact) async {
+    await contactDbRef.doc(contact.uid!).set(contact);
   }
 }
 
@@ -25,23 +37,25 @@ class Contact {
   final String user;
   final String firstName;
   final String lastName;
-  final String? address;
-  final String? email;
-  final String? phone;
-  final String? company;
-  final String? notes;
+  final String address;
+  final String email;
+  final String phone;
+  final String company;
+  final String notes;
   final String avatar;
   final String? dotProfile;
+  final String? uid;
 
   Contact({
+    this.uid,
     required this.user,
     required this.firstName,
     required this.lastName,
-    this.address,
-    this.email,
-    this.phone,
-    this.company,
-    this.notes,
+    required this.address,
+    required this.email,
+    required this.phone,
+    required this.company,
+    required this.notes,
     this.dotProfile,
     required this.avatar,
   });
