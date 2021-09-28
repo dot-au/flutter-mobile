@@ -36,14 +36,19 @@ dependencies:
   simple_gravatar: ^1.1.0
   uuid: ^3.0.4
   empty_widget: ^0.0.5
+  json_annotation: ^4.0.1
 
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
   flutter_test:
     sdk: flutter
+  integration_test: ^1.0.1
+  test: any
   flutter_native_splash: ^1.2.1
 
-  json_serializable: ^5.0.0
-  build_runner: ^2.1.2
+  # json_serializable: ^5.0.0
+  # build_runner: ^2.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
