@@ -12,6 +12,7 @@ import 'package:dot_mobile/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    print("Hello world");
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
