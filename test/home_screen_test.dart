@@ -11,20 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dot_mobile/main.dart';
 
 void main() {
-  testWidgets('Starter page test', (WidgetTester tester) async {
+  testWidgets('home screen test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(DotApp(initialScreen: StarterPage()));
-
-    await expectLater(
-      image,
-      matchesGoldenFile('assets/logo-white.png'),
-    );
-
-
-    // final Image image = find.byType(Image).evaluate().single.widget as Image;
-    // final String source = image.image'assets/logo-white.png' ;
-    
-
 
     // // Verify that our counter starts at 0.
     // expect(find.text('0'), findsOneWidget);
