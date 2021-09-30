@@ -36,6 +36,7 @@ dependencies:
   simple_gravatar: ^1.1.0
   uuid: ^3.0.4
   empty_widget: ^0.0.5
+  syncfusion_flutter_calendar: ^19.2.62
 
 dev_dependencies:
   flutter_test:
