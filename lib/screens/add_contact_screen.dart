@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dot_mobile/models/models.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
@@ -50,7 +51,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
       appBar: AppBar(
         backgroundColor: Get.theme.scaffoldBackgroundColor,
         elevation: 0,
-        title: Text("New Contact"),
+        title: Text(_getScreenTilte()),
       ),
       body: Form(
         key: _formKey,
@@ -173,6 +174,9 @@ class _AddContactScreenState extends State<AddContactScreen> {
                                   )
                                 : widget.contact!.avatar,
                             company: companyController.text,
+                            dotProfile: widget.contact != null
+                                ? widget.contact!.dotProfile
+                                : null,
                           );
 
                           if (contact.uid == null) {
@@ -203,5 +207,20 @@ class _AddContactScreenState extends State<AddContactScreen> {
       ),
       active: 3,
     );
+  }
+
+  String _getScreenTilte() {
+    var title = "New Contact";
+
+    if (widget.contact != null) {
+      title = "Edit Contact";
+
+      if (widget.contact!.dotProfile ==
+          FirebaseAuth.instance.currentUser!.email) {
+        title = "Edit My Profile";
+      }
+    }
+
+    return title;
   }
 }

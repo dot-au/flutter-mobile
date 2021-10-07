@@ -36,7 +36,7 @@ class ContactScreen extends StatelessWidget {
                   vertical: 16.0,
                 ),
                 child: StreamBuilder(
-                  stream: DotModel().contactDbRef.snapshots(),
+                  stream: DotModel().allContactsQuery.snapshots(),
                   builder: (
                     BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Contact>> snapshot,
@@ -103,7 +103,6 @@ class ContactScreen extends StatelessWidget {
                         ).toList(),
                       );
                     }
-
                     return Container();
                   },
                 ),

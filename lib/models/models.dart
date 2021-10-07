@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
@@ -21,6 +22,47 @@ class DotModel {
         return data;
       },
     );
+  }
+
+  Query<Contact> get allContactsQuery {
+    return FirebaseFirestore.instance
+        .collection(contactDbName)
+        .withConverter<Contact>(
+          fromFirestore: (snapshots, _) {
+            final data = snapshots.data()!;
+            data.putIfAbsent('uid', () => snapshots.id);
+            return Contact.fromJson(data);
+          },
+          toFirestore: (contact, _) {
+            final data = contact.toJson();
+            data.remove('uid');
+            return data;
+          },
+        )
+        .where('dotProfile', isNotEqualTo: FirebaseAuth.instance.currentUser!.email!)
+        .where('user', isEqualTo: FirebaseAuth.instance.currentUser!.email!);
+  }
+
+  Future<Contact> get myself async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection(contactDbName)
+        .where(
+          'dotProfile',
+          isEqualTo: FirebaseAuth.instance.currentUser!.email!,
+        )
+        .withConverter<Contact>(
+      fromFirestore: (snapshots, _) {
+        final data = snapshots.data()!;
+        data.putIfAbsent('uid', () => snapshots.id);
+        return Contact.fromJson(data);
+      },
+      toFirestore: (contact, _) {
+        final data = contact.toJson();
+        data.remove('uid');
+        return data;
+      },
+    ).get();
+    return snapshot.docs.first.data();
   }
 
   Future<DocumentReference<Contact>> addContact(Contact contact) {

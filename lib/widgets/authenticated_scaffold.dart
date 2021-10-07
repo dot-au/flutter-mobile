@@ -1,5 +1,6 @@
 import 'package:dot_mobile/screens/contact_screen.dart';
 import 'package:dot_mobile/screens/home_screen.dart';
+import 'package:dot_mobile/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -70,7 +71,9 @@ class AuthenticatedScaffold extends StatelessWidget {
           _buildBottomNavigationBarButton(
             active: active == 4,
             iconData: Icons.settings,
-            onPressed: () {},
+            onPressed: () {
+              Get.offAll(() => SettingsScreen(), transition: Transition.fadeIn);
+            },
           )
         ],
       ),

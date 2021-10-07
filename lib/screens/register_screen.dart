@@ -1,3 +1,4 @@
+import 'package:dot_mobile/models/models.dart';
 import 'package:dot_mobile/screens/login_screen.dart';
 import 'package:dot_mobile/screens/Verification.dart';
 import 'package:dot_mobile/themes.dart';
@@ -5,6 +6,7 @@ import 'package:dot_mobile/widgets/custom_text_form_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_gravatar/simple_gravatar.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -148,6 +150,23 @@ class RegisterFormState extends State<RegisterForm> {
                       email: emailController.value.text,
                       password: passwordController.value.text,
                     );
+                    await DotModel().addContact(new Contact(
+                      lastName: '',
+                      firstName: '',
+                      notes: '',
+                      avatar: Gravatar(emailController.value.text).imageUrl(
+                        size: 200,
+                        defaultImage: GravatarImage.retro,
+                        rating: GravatarRating.pg,
+                        fileExtension: true,
+                      ),
+                      user: emailController.value.text,
+                      email: '',
+                      phone: '',
+                      address: '',
+                      company: '',
+                      dotProfile: emailController.value.text,
+                    ));
                     await userCredential.user!.sendEmailVerification();
                     await Get.to(() => Login());
                   } on FirebaseAuthException catch (e) {
