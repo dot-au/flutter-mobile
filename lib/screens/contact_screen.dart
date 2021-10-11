@@ -4,9 +4,18 @@ import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../themes.dart';
 import 'add_contact_screen.dart';
 import 'contact_details_screen.dart';
+
+String? encodeQueryParameters(Map<String, String> params) {
+  return params.entries
+      .map((e) =>
+          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+      .join('&');
+}
 
 class ContactScreen extends StatelessWidget {
   @override
@@ -56,6 +65,125 @@ class ContactScreen extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+                          trailing: e.data().email.isNotEmpty
+                              ? Builder(
+                                  builder: (context) {
+                                    final email = e.data().email;
+                                    return FutureBuilder<QuerySnapshot>(
+                                      future:
+                                          DotModel().isUserOnDot(email).get(),
+                                      builder: (context, snapshot) {
+                                        return IconButton(
+                                          icon: Icon(Icons.message),
+                                          onPressed: () {
+                                            if (snapshot.data!.docs.isEmpty) {
+                                              showModalBottomSheet(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                                backgroundColor: Get.theme
+                                                    .scaffoldBackgroundColor,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return SafeArea(
+                                                    child: Wrap(children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 8.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            "The user is not yet on Dot.",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          vertical: 8.0,
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            "Would you want to invite the user?",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            ElevatedButton(
+                                                              onPressed: () {
+                                                                Get.back();
+                                                              },
+                                                              child: Text(
+                                                                "No",
+                                                              ),
+                                                              style: ButtonThemes
+                                                                  .elevatedButtonThemeLight(),
+                                                            ),
+                                                            ElevatedButton(
+                                                              onPressed: () {
+                                                                final Uri
+                                                                    emailLaunchUri =
+                                                                    Uri(
+                                                                  scheme:
+                                                                      'mailto',
+                                                                  path: email,
+                                                                  query: encodeQueryParameters(<
+                                                                      String,
+                                                                      String>{
+                                                                    'subject':
+                                                                        'I am on DOT. Join me!'
+                                                                  }),
+                                                                );
+
+                                                                launch(emailLaunchUri
+                                                                    .toString());
+                                                                Get.back();
+                                                              },
+                                                              child: Text(
+                                                                "Yes",
+                                                              ),
+                                                              style: ButtonThemes
+                                                                  .elevatedButtonThemeLight(),
+                                                            ),
+                                                          ])
+                                                    ]),
+                                                  );
+                                                },
+                                                context: context,
+                                              );
+                                            } else {
+                                              throw UnimplementedError();
+                                            }
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                )
+                              : null,
                           onTap: () {
                             showModalBottomSheet(
                               shape: RoundedRectangleBorder(

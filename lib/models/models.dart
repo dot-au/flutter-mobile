@@ -24,6 +24,19 @@ class DotModel {
     );
   }
 
+  Query<Map<String, dynamic>> isUserOnDot(String email) {
+    return FirebaseFirestore.instance
+        .collection(contactDbName)
+        .where(
+          'dotProfile',
+          isEqualTo: email,
+        )
+        .where(
+          'user',
+          isEqualTo: email,
+        );
+  }
+
   Query<Contact> get allContactsQuery {
     return FirebaseFirestore.instance
         .collection(contactDbName)
@@ -39,7 +52,8 @@ class DotModel {
             return data;
           },
         )
-        .where('dotProfile', isNotEqualTo: FirebaseAuth.instance.currentUser!.email!)
+        .where('dotProfile',
+            isNotEqualTo: FirebaseAuth.instance.currentUser!.email!)
         .where('user', isEqualTo: FirebaseAuth.instance.currentUser!.email!);
   }
 
@@ -98,7 +112,7 @@ class Contact {
     required this.phone,
     required this.company,
     required this.notes,
-    this.dotProfile,
+    this.dotProfile="",
     required this.avatar,
   });
 
