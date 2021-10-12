@@ -165,7 +165,9 @@ class _AddContactScreenState extends State<AddContactScreen> {
                             address: addressController.text,
                             notes: notesController.text,
                             avatar: widget.contact == null
-                                ? Gravatar("${Uuid().v1()}@example.com")
+                                ? Gravatar(emailController.text.isNotEmpty
+                                        ? emailController.text
+                                        : "${Uuid().v1()}@example.com")
                                     .imageUrl(
                                     size: 200,
                                     defaultImage: GravatarImage.retro,
@@ -176,10 +178,26 @@ class _AddContactScreenState extends State<AddContactScreen> {
                             company: companyController.text,
                             dotProfile: widget.contact != null
                                 ? widget.contact!.dotProfile
-                                : null,
+                                : "",
                           );
 
                           if (contact.uid == null) {
+                            // check if the contact already exists by email
+
+                            final allContacts = await DotModel()
+                                .allContactsQuery
+                                .snapshots()
+                                .first;
+                            if (allContacts.docs.any((element) =>
+                                element.data().email.isNotEmpty &&
+                                element.data().email == emailController.text)) {
+                              Get.snackbar(
+                                "Contact with this email already exists!",
+                                "Please try again",
+                              );
+                              return;
+                            }
+
                             await DotModel().addContact(contact);
                           } else {
                             await DotModel().updateContact(contact);

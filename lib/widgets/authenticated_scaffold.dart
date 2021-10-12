@@ -1,5 +1,6 @@
 import 'package:dot_mobile/screens/contact_screen.dart';
 import 'package:dot_mobile/screens/home_screen.dart';
+import 'package:dot_mobile/screens/message_screen.dart';
 import 'package:dot_mobile/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -52,7 +53,9 @@ class AuthenticatedScaffold extends StatelessWidget {
           _buildBottomNavigationBarButton(
             active: active == 1,
             iconData: Icons.messenger_outline,
-            onPressed: () {},
+            onPressed: () {
+              Get.offAll(() => MessageScreen(), transition: Transition.fadeIn);
+            },
           ),
           _buildBottomNavigationBarButton(
             active: active == 2,

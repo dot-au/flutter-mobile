@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../themes.dart';
 import 'add_contact_screen.dart';
 import 'contact_details_screen.dart';
+import 'message_details_screen.dart';
 
 String? encodeQueryParameters(Map<String, String> params) {
   return params.entries
@@ -175,7 +176,10 @@ class ContactScreen extends StatelessWidget {
                                                 context: context,
                                               );
                                             } else {
-                                              throw UnimplementedError();
+                                              Get.to(
+                                                () => MessageDetailsScreen(
+                                                    user: e.data()),
+                                              );
                                             }
                                           },
                                         );

@@ -6,6 +6,7 @@ part 'models.g.dart';
 
 class DotModel {
   static const contactDbName = "contact";
+  static const messageDbName = "message";
 
   CollectionReference<Contact> get contactDbRef {
     return FirebaseFirestore.instance
@@ -24,6 +25,28 @@ class DotModel {
     );
   }
 
+  CollectionReference<Message> get messageRef {
+    return FirebaseFirestore.instance
+        .collection(messageDbName)
+        .withConverter<Message>(
+      fromFirestore: (snapshots, _) {
+        final data = snapshots.data()!;
+        data.putIfAbsent('uid', () => snapshots.id);
+        return Message.fromJson(data);
+      },
+      toFirestore: (message, _) {
+        final data = message.toJson();
+        data.remove('uid');
+        return data;
+      },
+    );
+  }
+
+  Query<Message> getMessages() {
+    return messageRef
+        .where('to', arrayContains: FirebaseAuth.instance.currentUser!.email!);
+  }
+
   Query<Map<String, dynamic>> isUserOnDot(String email) {
     return FirebaseFirestore.instance
         .collection(contactDbName)
@@ -38,49 +61,28 @@ class DotModel {
   }
 
   Query<Contact> get allContactsQuery {
-    return FirebaseFirestore.instance
-        .collection(contactDbName)
-        .withConverter<Contact>(
-          fromFirestore: (snapshots, _) {
-            final data = snapshots.data()!;
-            data.putIfAbsent('uid', () => snapshots.id);
-            return Contact.fromJson(data);
-          },
-          toFirestore: (contact, _) {
-            final data = contact.toJson();
-            data.remove('uid');
-            return data;
-          },
-        )
+    return contactDbRef
         .where('dotProfile',
             isNotEqualTo: FirebaseAuth.instance.currentUser!.email!)
         .where('user', isEqualTo: FirebaseAuth.instance.currentUser!.email!);
   }
 
   Future<Contact> get myself async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection(contactDbName)
+    final snapshot = await contactDbRef
         .where(
           'dotProfile',
           isEqualTo: FirebaseAuth.instance.currentUser!.email!,
         )
-        .withConverter<Contact>(
-      fromFirestore: (snapshots, _) {
-        final data = snapshots.data()!;
-        data.putIfAbsent('uid', () => snapshots.id);
-        return Contact.fromJson(data);
-      },
-      toFirestore: (contact, _) {
-        final data = contact.toJson();
-        data.remove('uid');
-        return data;
-      },
-    ).get();
+        .get();
     return snapshot.docs.first.data();
   }
 
   Future<DocumentReference<Contact>> addContact(Contact contact) {
     return contactDbRef.add(contact);
+  }
+
+  Future<DocumentReference<Message>> addMessage(Message message) {
+    return messageRef.add(message);
   }
 
   Future updateContact(Contact contact) async {
@@ -112,7 +114,7 @@ class Contact {
     required this.phone,
     required this.company,
     required this.notes,
-    this.dotProfile="",
+    this.dotProfile = "",
     required this.avatar,
   });
 
@@ -124,4 +126,26 @@ class Contact {
       _$ContactFromJson(json);
 
   Map<String, dynamic> toJson() => _$ContactToJson(this);
+}
+
+@JsonSerializable()
+class Message {
+  final String author;
+  final String content;
+  final DateTime created;
+  final List<String> to;
+  final String? uid;
+
+  Message({
+    this.uid,
+    required this.content,
+    required this.created,
+    required this.author,
+    required this.to,
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      _$MessageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MessageToJson(this);
 }
