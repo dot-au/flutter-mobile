@@ -43,8 +43,8 @@ class DotModel {
   }
 
   Query<Message> getMessages() {
-    return messageRef
-        .where('to', arrayContains: FirebaseAuth.instance.currentUser!.email!);
+    return messageRef.where('to',
+        arrayContains: FirebaseAuth.instance.currentUser!.email!);
   }
 
   Query<Map<String, dynamic>> isUserOnDot(String email) {
@@ -57,6 +57,18 @@ class DotModel {
         .where(
           'user',
           isEqualTo: email,
+        );
+  }
+
+  Query<Contact> getContactByEmail(String email) {
+    return contactDbRef
+        .where(
+          'email',
+          isEqualTo: email,
+        )
+        .where(
+          'user',
+          isEqualTo: FirebaseAuth.instance.currentUser!.email!,
         );
   }
 

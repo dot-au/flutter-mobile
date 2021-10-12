@@ -38,6 +38,7 @@ dependencies:
   empty_widget: ^0.0.5
   url_launcher: ^6.0.12
   flutter_chat_ui: ^1.4.4
+  timeago: ^3.1.0
 
 dev_dependencies:
   flutter_test:
