@@ -1,16 +1,15 @@
-# dot_mobile
+## DOT
+* [General Information](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Page Images](#page-images)
 
-A new Flutter project.
+## General Information
+Our project is made for clients who want to manage their relationships and contact people easily in only one application. Our application provides clients with calendar event page, message page, contact list page for their convenience.
+## Technologies
+## Setup
+To run this project, install it locally using Flutter(make sure Flutter is installed):
+$ flutter doctor
+$ flutter run
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Page Images
