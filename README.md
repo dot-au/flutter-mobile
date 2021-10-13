@@ -1,5 +1,3 @@
-hey bro, u haven't pushed the code right for IT project
-could u do me a favour, put the following to readme file
 ## DOT
 * [General Information](#general-info)
 * [Technologies](#technologies)
