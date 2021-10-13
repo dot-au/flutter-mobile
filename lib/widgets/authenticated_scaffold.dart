@@ -1,3 +1,4 @@
+import 'package:dot_mobile/screens/calendar_screen.dart';
 import 'package:dot_mobile/screens/contact_screen.dart';
 import 'package:dot_mobile/screens/home_screen.dart';
 import 'package:dot_mobile/screens/message_screen.dart';
@@ -26,16 +27,28 @@ class AuthenticatedScaffold extends StatelessWidget {
     return Scaffold(
       appBar: appBar,
       floatingActionButton: floatingActionButton,
-      body: SingleChildScrollView(child: body),
-      bottomNavigationBar: appBar == null ? ValueListenableBuilder(
-        valueListenable: hiding.visible,
-        builder: (context, bool value, child) => AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          height: value ? 128 : 0.0,
-          child: bottomBar(),
-          curve: Curves.easeInOut,
-        ),
-      ) : null,
+      body: LayoutBuilder(
+        builder: (context, constraint) {
+          print(constraint.maxHeight);
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraint.maxHeight),
+              child: IntrinsicHeight(child: body),
+            ),
+          );
+        }
+      ),
+      bottomNavigationBar: appBar == null
+          ? ValueListenableBuilder(
+              valueListenable: hiding.visible,
+              builder: (context, bool value, child) => AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                height: value ? 128 : 0.0,
+                child: bottomBar(),
+                curve: Curves.easeInOut,
+              ),
+            )
+          : null,
     );
   }
 
@@ -48,7 +61,9 @@ class AuthenticatedScaffold extends StatelessWidget {
           _buildBottomNavigationBarButton(
             active: active == 0,
             iconData: Icons.calendar_today_outlined,
-            onPressed: () {},
+            onPressed: () {
+              Get.offAll(() => CalendarScreen(), transition: Transition.fadeIn);
+            },
           ),
           _buildBottomNavigationBarButton(
             active: active == 1,
