@@ -29,7 +29,6 @@ class AuthenticatedScaffold extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       body: LayoutBuilder(
         builder: (context, constraint) {
-          print(constraint.maxHeight);
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraint.maxHeight),
