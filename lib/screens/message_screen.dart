@@ -108,7 +108,6 @@ class ChatRoomTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_otherContact());
     return FutureBuilder<QuerySnapshot<Contact>>(
         future: DotModel().getContactByEmail(_otherContact()).get(),
         builder: (context, snapshot) {
