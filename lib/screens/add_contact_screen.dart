@@ -119,6 +119,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                     style: inputStyle,
                     decoration: InputDecoration(labelText: "Email"),
                     controller: emailController,
+                    enabled: _getScreenTilte() != "Edit My Profile",
                   ),
                 ),
                 Padding(

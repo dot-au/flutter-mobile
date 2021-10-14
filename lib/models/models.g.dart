@@ -6,6 +6,23 @@ part of 'models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+Meeting _$MeetingFromJson(Map<String, dynamic> json) => Meeting(
+      date: DateTime.parse(json['date'] as String),
+      notes: json['notes'] as String,
+      createdBy: json['createdBy'] as String,
+      attendees:
+          (json['attendees'] as List<dynamic>).map((e) => e as String).toList(),
+      uid: json['uid'] as String?,
+    );
+
+Map<String, dynamic> _$MeetingToJson(Meeting instance) => <String, dynamic>{
+      'date': instance.date.toIso8601String(),
+      'notes': instance.notes,
+      'createdBy': instance.createdBy,
+      'attendees': instance.attendees,
+      'uid': instance.uid,
+    };
+
 Contact _$ContactFromJson(Map<String, dynamic> json) => Contact(
       uid: json['uid'] as String?,
       user: json['user'] as String,

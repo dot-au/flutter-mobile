@@ -32,7 +32,7 @@ class AuthenticatedScaffold extends StatelessWidget {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraint.maxHeight),
-              child: IntrinsicHeight(child: body),
+              child: body,
             ),
           );
         }

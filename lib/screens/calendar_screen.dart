@@ -1,8 +1,12 @@
 import 'dart:collection';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dot_mobile/models/models.dart';
 import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../themes.dart';
@@ -41,7 +45,6 @@ class TableEventsExample extends StatefulWidget {
 }
 
 class _TableEventsExampleState extends State<TableEventsExample> {
-  late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -50,32 +53,42 @@ class _TableEventsExampleState extends State<TableEventsExample> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
+  var meetings = <Meeting>[];
+
   @override
   void initState() {
     super.initState();
 
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    // _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+
+    DotModel().getMeetings().snapshots().listen((event) {
+      setState(() {
+        this.meetings = event.docs.map((e) => e.data()).toList();
+      });
+    });
   }
 
   @override
   void dispose() {
-    _selectedEvents.dispose();
     super.dispose();
   }
 
-  List<Event> _getEventsForDay(DateTime day) {
+  List<Meeting> _getEventsForDay(DateTime day) {
+    // print(meetings);
     // Implementation example
-    return kEvents[day] ?? [];
-  }
-
-  List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    // Implementation example
-    final days = daysInRange(start, end);
-
-    return [
-      for (final d in days) ..._getEventsForDay(d),
-    ];
+    final todayMeetings = <Meeting>[];
+    for (final meeting in meetings) {
+      // print(meeting.date);
+      if (day.month == meeting.date.month &&
+          day.year == meeting.date.year &&
+          day.day == meeting.date.day) {
+        todayMeetings.add(meeting);
+      }
+    }
+    // print(todayMeetings);
+    return todayMeetings;
+    // return kEvents[day] ?? [];
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -88,31 +101,14 @@ class _TableEventsExampleState extends State<TableEventsExample> {
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
 
-      _selectedEvents.value = _getEventsForDay(selectedDay);
-    }
-  }
-
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-    setState(() {
-      _selectedDay = null;
-      _focusedDay = focusedDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    });
-
-    // `start` or `end` could be null
-    if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
-    } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start);
-    } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end);
+      // _selectedEvents.value = _getEventsForDay(selectedDay);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final todayMeetings = _getEventsForDay(_focusedDay);
+    todayMeetings.sort((a, b) => a.date.compareTo(b.date));
     return Column(
       children: [
         Container(
@@ -122,7 +118,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
             elevation: 14.0,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: TableCalendar<Event>(
+              child: TableCalendar<Meeting>(
                 firstDay: kFirstDay,
                 lastDay: kLastDay,
                 focusedDay: _focusedDay,
@@ -161,7 +157,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
                   ),
                 ),
                 onDaySelected: _onDaySelected,
-                onRangeSelected: _onRangeSelected,
                 onFormatChanged: null,
                 onPageChanged: (focusedDay) {
                   _focusedDay = focusedDay;
@@ -171,85 +166,131 @@ class _TableEventsExampleState extends State<TableEventsExample> {
           ),
         ),
         const SizedBox(height: 8.0),
-        Container(
-          height: 200,
-          child: Card(
-            color: Colors.white,
-            elevation: 14.0,
-            child: ValueListenableBuilder<List<Event>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.all(6.0),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 4.0,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: ListTile(
-                          onTap: () => print('${value[index]}'),
-                          title: Text('${value[index]}'),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
+        if (todayMeetings.isEmpty)
+          Container(
+            width: 200,
+            height: 200,
+            child: EmptyWidget(
+              hideBackgroundAnimation: true,
+              image: null,
+              packageImage: PackageImage.Image_2,
+              title: 'No meetings',
+              titleTextStyle: TextStyle(
+                fontSize: 22,
+                color: Color(0xff9da9c7),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
+        Column(
+          children: todayMeetings.map((e) => MeetingEvent(meeting: e)).toList(),
         ),
       ],
     );
   }
 }
 
-/// Example event class.
-class Event {
-  final String title;
+class MeetingEvent extends StatefulWidget {
+  final Meeting meeting;
 
-  const Event(this.title);
+  const MeetingEvent({Key? key, required this.meeting}) : super(key: key);
 
   @override
-  String toString() => title;
+  State<MeetingEvent> createState() => _MeetingEventState();
 }
 
-/// Example events.
-///
-/// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
-final kEvents = LinkedHashMap<DateTime, List<Event>>(
-  equals: isSameDay,
-  hashCode: getHashCode,
-)..addAll(_kEventSource);
+class _MeetingEventState extends State<MeetingEvent> {
+  List<Contact> contacts = [];
 
-final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
-    key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
-    value: (item) => List.generate(
-        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
-  ..addAll({
-    kToday: [
-      Event('Today\'s Event 1'),
-      Event('Today\'s Event 2'),
-    ],
-  });
+  @override
+  void initState() {
+    super.initState();
 
-int getHashCode(DateTime key) {
-  return key.day * 1000000 + key.month * 10000 + key.year;
-}
+    DotModel()
+        .getContactsByEmailList(widget.meeting.attendees)
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        this.contacts = event.docs.map((e) => e.data()).toList();
+      });
+    });
+  }
 
-/// Returns a list of [DateTime] objects from [first] to [last], inclusive.
-List<DateTime> daysInRange(DateTime first, DateTime last) {
-  final dayCount = last.difference(first).inDays + 1;
-  return List.generate(
-    dayCount,
-    (index) => DateTime.utc(first.year, first.month, first.day + index),
-  );
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6.0),
+      child: Card(
+        color: const Color(0xFF4A6572),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 12.0,
+            horizontal: 16.0,
+          ),
+          onTap: () async {
+            await Get.to(
+              () => AddMeetingScreen(
+                meeting: widget.meeting,
+                contacts: contacts,
+              ),
+            );
+          },
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                DateFormat("dd/MM/yyyy HH:mm").format(widget.meeting.date),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18),
+              ),
+              _buildChips(contacts),
+              if (widget.meeting.notes.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    "Notes: " + widget.meeting.notes,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChips(List<Contact> contacts) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Wrap(
+        spacing: 12.0,
+        runSpacing: 3.0,
+        children: <Widget>[
+          ...contacts.map(
+            _buildChip,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChip(Contact contact) {
+    return Chip(
+      elevation: 1.0,
+      padding: EdgeInsets.all(2.0),
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(contact.fullName),
+        ],
+      ),
+    );
+  }
 }
 
 final kToday = DateTime.now();
