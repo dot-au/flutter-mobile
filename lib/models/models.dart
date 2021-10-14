@@ -7,6 +7,7 @@ part 'models.g.dart';
 class DotModel {
   static const contactDbName = "contact";
   static const messageDbName = "message";
+  static const meetingDbName = "meeting";
 
   CollectionReference<Contact> get contactDbRef {
     return FirebaseFirestore.instance
@@ -19,6 +20,23 @@ class DotModel {
       },
       toFirestore: (contact, _) {
         final data = contact.toJson();
+        data.remove('uid');
+        return data;
+      },
+    );
+  }
+
+  CollectionReference<Meeting> get meetingDbRef {
+    return FirebaseFirestore.instance
+        .collection(meetingDbName)
+        .withConverter<Meeting>(
+      fromFirestore: (snapshots, _) {
+        final data = snapshots.data()!;
+        data.putIfAbsent('uid', () => snapshots.id);
+        return Meeting.fromJson(data);
+      },
+      toFirestore: (meeting, _) {
+        final data = meeting.toJson();
         data.remove('uid');
         return data;
       },
@@ -39,6 +57,13 @@ class DotModel {
         data.remove('uid');
         return data;
       },
+    );
+  }
+
+  Query<Meeting> getMeetings() {
+    return meetingDbRef.where(
+      'attendees',
+      arrayContains: FirebaseAuth.instance.currentUser!.email!,
     );
   }
 
@@ -72,6 +97,18 @@ class DotModel {
         );
   }
 
+  Query<Contact> getContactsByEmailList(List<String> emails) {
+    return contactDbRef
+        .where(
+          'email',
+          whereIn: emails,
+        )
+        .where(
+          'user',
+          isEqualTo: FirebaseAuth.instance.currentUser!.email!,
+        );
+  }
+
   Query<Contact> get allContactsQuery {
     return contactDbRef
         .where('dotProfile',
@@ -97,9 +134,39 @@ class DotModel {
     return messageRef.add(message);
   }
 
+  Future<DocumentReference<Meeting>> addMeeting(Meeting meeting) {
+    return meetingDbRef.add(meeting);
+  }
+
+  Future updateMeeting(Meeting meeting) async {
+    await meetingDbRef.doc(meeting.uid!).set(meeting);
+  }
+
   Future updateContact(Contact contact) async {
     await contactDbRef.doc(contact.uid!).set(contact);
   }
+}
+
+@JsonSerializable()
+class Meeting {
+  final DateTime date;
+  final String notes;
+  final String createdBy;
+  final List<String> attendees;
+  final String? uid;
+
+  Meeting({
+    required this.date,
+    required this.notes,
+    required this.createdBy,
+    required this.attendees,
+    this.uid,
+  });
+
+  factory Meeting.fromJson(Map<String, dynamic> json) =>
+      _$MeetingFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MeetingToJson(this);
 }
 
 @JsonSerializable()
@@ -131,6 +198,9 @@ class Contact {
   });
 
   String get fullName {
+    if (firstName.isEmpty) {
+      return email;
+    }
     return firstName + " " + lastName;
   }
 
