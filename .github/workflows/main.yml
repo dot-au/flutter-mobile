@@ -6,17 +6,6 @@ on:
 
 jobs:
   build:
-
-    strategy:
-      # A set of different configurations of the virtual
-      # environment.
-      matrix:
-        device:
-          - "iPhone 13 Pro"
-      fail-fast: false
-      # The type of machine to run the job on.
-      # Contains a sequence of tasks.
-    
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
