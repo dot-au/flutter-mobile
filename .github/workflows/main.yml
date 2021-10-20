@@ -25,6 +25,8 @@ jobs:
         run: xcrun simctl boot "iPhone 13 Pro"
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
       - name: "List devices"
         run: "flutter devices"
       - name: "List devices"
