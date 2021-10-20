@@ -1,6 +1,3 @@
-import 'dart:collection';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dot_mobile/models/models.dart';
 import 'package:dot_mobile/widgets/authenticated_scaffold.dart';
 import 'package:empty_widget/empty_widget.dart';

@@ -1,8 +1,7 @@
-import 'package:dot_mobile/screens/Message.dart';
-import 'package:dot_mobile/screens/Events.dart';
-import 'package:dot_mobile/screens/Setting.dart';
 import 'package:dot_mobile/screens/Calendar.dart';
-import 'package:dot_mobile/themes.dart';
+import 'package:dot_mobile/screens/Events.dart';
+import 'package:dot_mobile/screens/Message.dart';
+import 'package:dot_mobile/screens/Setting.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

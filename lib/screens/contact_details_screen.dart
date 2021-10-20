@@ -143,8 +143,8 @@ class _ContactDetailInfoRow extends StatelessWidget {
         Expanded(
           child: TextButton(
             style: TextButton.styleFrom(alignment: Alignment.centerLeft),
-            onPressed:
-                isContentNotProvided() ? null
+            onPressed: isContentNotProvided()
+                ? null
                 : () async {
                     await Clipboard.setData(ClipboardData(text: content));
                     Get.snackbar(

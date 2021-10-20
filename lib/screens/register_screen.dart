@@ -1,6 +1,5 @@
 import 'package:dot_mobile/models/models.dart';
 import 'package:dot_mobile/screens/login_screen.dart';
-import 'package:dot_mobile/screens/Verification.dart';
 import 'package:dot_mobile/themes.dart';
 import 'package:dot_mobile/widgets/custom_text_form_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
