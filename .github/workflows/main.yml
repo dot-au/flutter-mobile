@@ -36,7 +36,7 @@ jobs:
       - name: "List devices"
         run: "flutter devices"
       - name: "List devices"
-        run: "flutter doctor"
+        run: "flutter build ios"
       - name: "Run Flutter Driver tests"
         run: "flutter test integration_test"
       - uses: erickzanardo/flutter-gh-pages@v6
