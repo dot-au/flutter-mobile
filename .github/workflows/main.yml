@@ -21,15 +21,7 @@ jobs:
     steps:
       - name: run tests
         run: |
-          set -eu
-
-          # start android emulator
-          START=`date +%s` > /dev/null
-
-          $ANDROID_HOME/tools/android list avd
-          $ANDROID_HOME/tools/emulator64-arm -avd test -no-window -no-boot-anim -no-audio -verbose &
-          wait-for-emulator
-          unlock-emulator-screen
+          $ANDROID_HOME/tools/sdkmanager --list | grep system-images
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
 
