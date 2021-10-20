@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: run tests
         run: |
-          $ANDROID_HOME/tools/sdkmanager --list | grep system-images
+          $ANDROID_HOME/tools/bin/sdkmanager --list | grep system-images
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
 
