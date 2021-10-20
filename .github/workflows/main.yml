@@ -17,7 +17,7 @@ jobs:
       # The type of machine to run the job on.
       # Contains a sequence of tasks.
 
-    runs-on: macOS-latest
+    runs-on: macos-11
     steps:
       - name: "List all simulators"
         run: "xcrun instruments -s"
@@ -36,7 +36,7 @@ jobs:
       - name: "List devices"
         run: "flutter devices"
       - name: "List devices"
-        run: "flutter build ios"
+        run: "flutter pub get"
       - name: "Run Flutter Driver tests"
         run: "flutter test integration_test"
       - uses: erickzanardo/flutter-gh-pages@v6
