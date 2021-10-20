@@ -9,12 +9,13 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
 
   CustomTextFormField({
+    Key? key,
     this.obscureText = false,
     required this.controller,
     required this.hintText,
     required this.icon,
     required this.validator,
-  });
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {

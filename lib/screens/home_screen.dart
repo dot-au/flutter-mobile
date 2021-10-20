@@ -6,11 +6,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../main.dart';
 import 'calendar_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser == null) {
+      // Get.offAll(() => StarterPage());
+      return Container();
+    }
     return AuthenticatedScaffold(
       body: SafeArea(
         child: Column(children: [

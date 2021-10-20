@@ -97,6 +97,7 @@ class RegisterFormState extends State<RegisterForm> {
           Padding(
             padding: const EdgeInsets.only(bottom: 15.0, top: 42.0),
             child: CustomTextFormField(
+              key: Key("emailInput"),
               hintText: "Email Address",
               controller: emailController,
               icon: Icons.email_outlined,
@@ -119,6 +120,7 @@ class RegisterFormState extends State<RegisterForm> {
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0, top: 15.0),
             child: CustomTextFormField(
+              key: Key("passwordInput"),
               controller: passwordController,
               hintText: "Password",
               icon: Icons.password_outlined,
@@ -168,6 +170,7 @@ class RegisterFormState extends State<RegisterForm> {
                       dotProfile: emailController.value.text,
                     ));
                     await userCredential.user!.sendEmailVerification();
+                    await FirebaseAuth.instance.signOut();
                     await Get.to(() => Login());
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {

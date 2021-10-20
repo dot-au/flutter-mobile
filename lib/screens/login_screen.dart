@@ -95,6 +95,7 @@ class SignInFormState extends State<SignInForm> {
           Padding(
             padding: const EdgeInsets.only(bottom: 15.0, top: 42.0),
             child: CustomTextFormField(
+              key: Key("emailInput"),
               hintText: "Email Address",
               controller: emailController,
               icon: Icons.email_outlined,
@@ -118,6 +119,7 @@ class SignInFormState extends State<SignInForm> {
             padding: const EdgeInsets.only(bottom: 6.0, top: 15.0),
             child: CustomTextFormField(
               controller: passwordController,
+              key: Key("passwordInput"),
               hintText: "Password",
               icon: Icons.password_outlined,
               obscureText: true,

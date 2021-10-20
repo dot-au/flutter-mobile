@@ -27,16 +27,14 @@ class AuthenticatedScaffold extends StatelessWidget {
     return Scaffold(
       appBar: appBar,
       floatingActionButton: floatingActionButton,
-      body: LayoutBuilder(
-        builder: (context, constraint) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraint.maxHeight),
-              child: body,
-            ),
-          );
-        }
-      ),
+      body: LayoutBuilder(builder: (context, constraint) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraint.maxHeight),
+            child: body,
+          ),
+        );
+      }),
       bottomNavigationBar: appBar == null
           ? ValueListenableBuilder(
               valueListenable: hiding.visible,
@@ -91,18 +89,20 @@ class AuthenticatedScaffold extends StatelessWidget {
             onPressed: () {
               Get.offAll(() => SettingsScreen(), transition: Transition.fadeIn);
             },
+            key: ValueKey("settingsScreenButton"),
           )
         ],
       ),
     );
   }
 
-  Widget _buildBottomNavigationBarButton({
-    required bool active,
-    required IconData iconData,
-    required VoidCallback onPressed,
-  }) {
+  Widget _buildBottomNavigationBarButton(
+      {required bool active,
+      required IconData iconData,
+      required VoidCallback onPressed,
+      Key? key}) {
     return TextButton(
+      key: key,
       style: TextButton.styleFrom(
         backgroundColor: active ? const Color(0xFFF9AA33) : Colors.white,
         shape: CircleBorder(),
