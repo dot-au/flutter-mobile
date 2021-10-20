@@ -28,7 +28,7 @@ jobs:
           flutter emulators
           flutter emulators --launch Nexus_5X
           flutter devices
-          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server
+          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
       
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
