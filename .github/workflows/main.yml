@@ -20,7 +20,7 @@ jobs:
     runs-on: macos-11
     steps:
       - name: "List all simulators"
-        run: "xcrun instruments -s"
+        run: "xcrun simctl list"
       - name: "Start Simulator"
         run: |
           UDID=$(
