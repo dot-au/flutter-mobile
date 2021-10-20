@@ -21,8 +21,6 @@ void main() {
 
   final settingsScreenButton = find.byKey(ValueKey("settingsScreenButton"));
 
-  setUpAll(() async {});
-
   testWidgets(
     'Starter page display correctly',
     (WidgetTester tester) async {
