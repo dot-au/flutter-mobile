@@ -19,20 +19,8 @@ jobs:
 
     runs-on: macos-11
     steps:
-      - name: run tests
-        run: |
-          $ANDROID_HOME/tools/bin/sdkmanager --list | grep system-images
-          $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86_64"
-          $ANDROID_HOME/tools/bin/avdmanager list avd
-          $ANDROID_HOME/tools/bin/avdmanager create avd --force --name Nexus_5X --abi google_apis/x86_64 --package "system-images;android-29;google_apis;x86_64" --device "Nexus 5X"
-          $ANDROID_HOME/tools/emulator -avd Nexus_5X -skin 1080x1920 &
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
-
-      - name: "List devices"
-        run: "flutter devices"
-      - name: "List devices"
-        run: "flutter pub get"
       - name: "Run Flutter Driver tests"
-        run: "flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -v"
+        run: "flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d web-server -v"
       - uses: erickzanardo/flutter-gh-pages@v6
