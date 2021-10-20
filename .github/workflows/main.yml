@@ -22,15 +22,7 @@ jobs:
       - name: "List all simulators"
         run: "xcrun simctl list"
       - name: "Start Simulator"
-        run: |
-          UDID=$(
-            xcrun instruments -s |
-            awk \
-              -F ' *[][]' \
-              -v 'device=${{ matrix.device }}' \
-              '$1 == device { print $2 }'
-          )
-          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+        run: xcrun simctl boot "iPhone 13 Pro"
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
       - name: "List devices"
