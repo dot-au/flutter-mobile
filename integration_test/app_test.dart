@@ -4,22 +4,110 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:uuid/uuid.dart';
 
+final loginButtonFinder = find.text("Log In");
+final registerButtonFinder = find.text("Register");
+
+final emailInputFinder = find.byKey(Key("emailInput"));
+final passwordInputFinder = find.byKey(Key("passwordInput"));
+
+final signUpButtonFinder = find.text("SIGN UP");
+final signInButtonFinder = find.text("SIGN IN");
+
+final settingsScreenButton = find.byKey(ValueKey("settingsScreenButton"));
+
+class AuthCreds {
+  final String email;
+  final String password;
+
+  AuthCreds(this.email, this.password);
+
+  static AuthCreds generate() {
+    return AuthCreds('${Uuid().v1()}@example.com', "thisisapassword");
+  }
+}
+
+extension WidgetTesterExtension on WidgetTester {
+  Future enterAuthCreds(AuthCreds creds) async {
+    await tap(emailInputFinder);
+    await pumpAndSettle();
+    await enterText(emailInputFinder, creds.email);
+    await pumpAndSettle();
+
+    await tap(passwordInputFinder);
+    await pumpAndSettle();
+    await enterText(passwordInputFinder, creds.password);
+    await pumpAndSettle();
+  }
+
+  Future register(AuthCreds creds) async {
+    await enterAuthCreds(creds);
+
+    await tap(signUpButtonFinder);
+    await pumpAndSettle();
+    await pump(Duration(seconds: 5));
+    await pump(Duration(seconds: 5));
+    await pump(Duration(seconds: 5));
+  }
+
+  Future signIn(AuthCreds creds) async {
+    await enterAuthCreds(creds);
+
+    await tap(signInButtonFinder);
+    await pumpAndSettle();
+    await pump(Duration(seconds: 5));
+    await pump(Duration(seconds: 5));
+    await pump(Duration(seconds: 5));
+  }
+
+  Future startApp() async {
+    app.main();
+    await pumpAndSettle();
+  }
+
+  Future signOut() async {
+    await tap(settingsScreenButton);
+    await pumpAndSettle();
+    await tap(find.text("Log Out"));
+    await pumpAndSettle();
+  }
+
+  Future goToLoginPage() async {
+    await tap(loginButtonFinder);
+    await pumpAndSettle();
+  }
+
+  Future goToSignUpPage() async {
+    await tap(registerButtonFinder);
+    await pumpAndSettle();
+  }
+
+  Future finishAuthFlow() async {
+    await startApp();
+
+    await goToSignUpPage();
+
+    final creds = AuthCreds.generate();
+    await register(creds);
+    await signIn(creds);
+  }
+
+  Future goToContactScreen() async {
+    await tap(find.byKey(Key("contactScreenButton")));
+
+    await pumpAndSettle();
+  }
+
+  Future goToAddContact() async {
+    await tap(find.text("Add Contact"));
+    await pumpAndSettle();
+  }
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   final username = '${Uuid().v1()}@example.com';
   final password = 'thisisapassword';
-
-  final loginButtonFinder = find.text("Log In");
-  final registerButtonFinder = find.text("Register");
-
-  final emailInputFinder = find.byKey(Key("emailInput"));
-  final passwordInputFinder = find.byKey(Key("passwordInput"));
-
-  final signUpButtonFinder = find.text("SIGN UP");
-  final signInButtonFinder = find.text("SIGN IN");
-
-  final settingsScreenButton = find.byKey(ValueKey("settingsScreenButton"));
 
   testWidgets(
     'Starter page display correctly',
@@ -129,4 +217,12 @@ void main() {
       await tester.pumpAndSettle();
     },
   );
+
+  testWidgets('Can add a contact', (tester) async {
+    await tester.finishAuthFlow();
+
+    await tester.goToContactScreen();
+
+    await tester.signOut();
+  });
 }

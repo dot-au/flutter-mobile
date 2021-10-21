@@ -78,6 +78,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
                               return "First name is required!";
                             }
                           },
+
                         ),
                       ),
                     ),

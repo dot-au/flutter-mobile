@@ -82,6 +82,7 @@ class AuthenticatedScaffold extends StatelessWidget {
             onPressed: () {
               Get.offAll(() => ContactScreen(), transition: Transition.fadeIn);
             },
+            key: ValueKey("contactScreenButton"),
           ),
           _buildBottomNavigationBarButton(
             active: active == 4,
